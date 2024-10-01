@@ -31,7 +31,7 @@ public class AuthService {
         if(userInfo.isPresent()) {
             UserInfo user = userInfo.get();
             String token = jwtService.generateJwtToken(userName);
-            return new AuthResponseDto(user.getUserName(),user.getFirstName(),user.getLastName(), user.getRoles(),token);
+            return new AuthResponseDto(token, user.getUserName(),user.getFirstName(),user.getLastName(), user.getRoles());
         }else{
             throw new UsernameNotFoundException("User not found with "+userName);
         }
