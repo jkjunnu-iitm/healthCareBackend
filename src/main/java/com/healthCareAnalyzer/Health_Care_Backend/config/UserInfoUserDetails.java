@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -13,9 +12,9 @@ import java.util.stream.Collectors;
 
 public class UserInfoUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
-    private List<GrantedAuthority> authorities;
+    private final String username;
+    private final String password;
+    private final List<GrantedAuthority> authorities;
 
     public UserInfoUserDetails(UserInfo userInfo) {
         username=userInfo.getUserName();
