@@ -13,16 +13,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class RegisterRequestDto {
+    @NotBlank
     @Email(message = "Invalid email id")
     private String userName;
     @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;
-    @Size(min = 4,max = 20, message = "Min password length 6")
+    @NotBlank
+    @Size(min = 4, max = 20, message = "Min password length 4")
     private String password;
-    @Size(min = 4,max = 20, message = "Min password length 6")
+    @NotBlank
+    @Size(min = 4, max = 20, message = "Min password length 4")
     private String confirmPassword;
+    @NotBlank
     @Pattern(regexp = "^ROLE_.*")
     private String roles;
 }
