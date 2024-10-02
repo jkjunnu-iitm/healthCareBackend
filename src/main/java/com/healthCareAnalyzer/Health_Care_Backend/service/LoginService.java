@@ -3,8 +3,9 @@ package com.healthCareAnalyzer.Health_Care_Backend.service;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.LoginResponseDto;
 import com.healthCareAnalyzer.Health_Care_Backend.entity.UserEntity;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.UserInfoRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class LoginService {
             String token = jwtService.generateJwtToken(userName);
             return new LoginResponseDto(token, user.getUserName(), user.getFirstName(), user.getLastName(), user.getRoles());
         } else {
-            throw new UsernameNotFoundException("User not found with " + userName);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found with " + userName);
         }
 
     }

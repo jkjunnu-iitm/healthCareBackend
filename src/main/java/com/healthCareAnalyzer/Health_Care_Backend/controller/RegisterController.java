@@ -25,16 +25,15 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody @Valid RegisterRequestDto registerRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequestDto registerRequestDto, BindingResult bindingResult) {
         try {
-            if (bindingResult.hasErrors()) {
+            if (!bindingResult.hasErrors()) {
+                String response = registerService.addUser(registerRequestDto);
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            } else {
                 log.info(bindingResult.getAllErrors().toString());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields are not valid");
-
             }
-
-            String response = registerService.addUser(registerRequestDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (ResponseStatusException e) {
 
