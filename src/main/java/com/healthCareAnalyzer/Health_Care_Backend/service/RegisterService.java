@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service;
 
 import com.healthCareAnalyzer.Health_Care_Backend.dto.RegisterRequestDto;
-import com.healthCareAnalyzer.Health_Care_Backend.entity.UserInfo;
+import com.healthCareAnalyzer.Health_Care_Backend.entity.UserEntity;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.UserInfoRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,13 +28,13 @@ public class RegisterService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords do not match");
         }
 
-        UserInfo userInfo = new UserInfo();
-        userInfo.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
-        userInfo.setUserName(registerRequestDto.getUserName());
-        userInfo.setRoles(registerRequestDto.getRoles());
-        userInfo.setFirstName(registerRequestDto.getFirstName());
-        userInfo.setLastName(registerRequestDto.getLastName());
-        userInfoRepository.save(userInfo);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
+        userEntity.setUserName(registerRequestDto.getUserName());
+        userEntity.setRoles(registerRequestDto.getRoles());
+        userEntity.setFirstName(registerRequestDto.getFirstName());
+        userEntity.setLastName(registerRequestDto.getLastName());
+        userInfoRepository.save(userEntity);
         return "User added to system";
     }
 

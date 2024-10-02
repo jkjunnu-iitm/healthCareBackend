@@ -1,6 +1,6 @@
 package com.healthCareAnalyzer.Health_Care_Backend.config;
 
-import com.healthCareAnalyzer.Health_Care_Backend.entity.UserInfo;
+import com.healthCareAnalyzer.Health_Care_Backend.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +16,10 @@ public class UserInfoUserDetails implements UserDetails {
     private final String password;
     private final List<GrantedAuthority> authorities;
 
-    public UserInfoUserDetails(UserInfo userInfo) {
-        username=userInfo.getUserName();
-        password=userInfo.getPassword();
-        authorities= Arrays.stream(userInfo.getRoles().split(","))
+    public UserInfoUserDetails(UserEntity userEntity) {
+        username = userEntity.getUserName();
+        password = userEntity.getPassword();
+        authorities = Arrays.stream(userEntity.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
