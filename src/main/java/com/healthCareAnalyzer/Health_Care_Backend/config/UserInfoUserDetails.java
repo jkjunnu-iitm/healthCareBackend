@@ -15,13 +15,16 @@ public class UserInfoUserDetails implements UserDetails {
     private final String username;
     private final String password;
     private final List<GrantedAuthority> authorities;
+    private final Boolean isEnabled;
 
     public UserInfoUserDetails(UserEntity userEntity) {
-        username = userEntity.getUserName();
+        username = userEntity.getUsername();
         password = userEntity.getPassword();
-        authorities = Arrays.stream(userEntity.getRoles().split(","))
+        authorities = Arrays.stream(userEntity.getRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+
+        isEnabled = userEntity.getIsEnabled();
     }
 
     @Override
@@ -56,6 +59,6 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

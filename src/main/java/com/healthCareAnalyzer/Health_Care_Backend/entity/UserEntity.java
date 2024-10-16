@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "user_table")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,9 +14,9 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
     @Column(nullable = false, unique = true)
-    private String userName;
+    private String username;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
@@ -23,5 +24,8 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
-    private String roles;
+    private String role;
+    @Column(nullable = false)
+    private Boolean isEnabled;
+
 }

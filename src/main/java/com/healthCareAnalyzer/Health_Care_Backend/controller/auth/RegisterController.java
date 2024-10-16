@@ -1,9 +1,10 @@
-package com.healthCareAnalyzer.Health_Care_Backend.controller;
+package com.healthCareAnalyzer.Health_Care_Backend.controller.auth;
 
-import com.healthCareAnalyzer.Health_Care_Backend.dto.RegisterRequestDto;
-import com.healthCareAnalyzer.Health_Care_Backend.service.RegisterService;
+import com.healthCareAnalyzer.Health_Care_Backend.dto.auth.register.RegisterRequestDto;
+import com.healthCareAnalyzer.Health_Care_Backend.service.auth.register.RegisterService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +17,27 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class RegisterController {
 
-
     private final RegisterService registerService;
 
-
+    @Autowired
     public RegisterController(RegisterService registerService) {
         this.registerService = registerService;
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequestDto registerRequestDto, BindingResult bindingResult) {
         try {
             if (!bindingResult.hasErrors()) {
-                String response = registerService.addUser(registerRequestDto);
-                return ResponseEntity.status(HttpStatus.CREATED).body(response);
+                Boolean isUserAdded = registerService.addUser(registerRequestDto);
+                if (isUserAdded) {
+
+                    return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User could not be registered");
+                }
+
             } else {
                 log.info(bindingResult.getAllErrors().toString());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields are not valid");
@@ -50,6 +58,5 @@ public class RegisterController {
         }
 
     }
-
 
 }
