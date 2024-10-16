@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/products")
 public class DummyController {
 
-
-
     private final DummyService dummyService;
 
     public DummyController(DummyService dummyService) {
@@ -28,7 +26,7 @@ public class DummyController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public String getProductById(@PathVariable int id) {
-        return "product"+id;
+        return "product" + id;
     }
 
     @GetMapping("/welcome")

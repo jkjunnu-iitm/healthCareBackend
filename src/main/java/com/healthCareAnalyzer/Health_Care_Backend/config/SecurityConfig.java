@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.config;
 
 import com.healthCareAnalyzer.Health_Care_Backend.filter.JwtAuthFilter;
-import com.healthCareAnalyzer.Health_Care_Backend.service.UserInfoUserDetailsService;
+import com.healthCareAnalyzer.Health_Care_Backend.service.auth.UserInfoUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,9 +46,9 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth-> auth.requestMatchers("/products/welcome","/auth/register","/auth/login").permitAll()
-                        .requestMatchers("/products/**").authenticated())
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/products/welcome", "/auth/register", "/auth/login").permitAll()
+                        .requestMatchers("/**").authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

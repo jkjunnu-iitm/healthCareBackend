@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.filter;
 
-import com.healthCareAnalyzer.Health_Care_Backend.service.JwtService;
-import com.healthCareAnalyzer.Health_Care_Backend.service.UserInfoUserDetailsService;
+import com.healthCareAnalyzer.Health_Care_Backend.service.auth.JwtService;
+import com.healthCareAnalyzer.Health_Care_Backend.service.auth.UserInfoUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

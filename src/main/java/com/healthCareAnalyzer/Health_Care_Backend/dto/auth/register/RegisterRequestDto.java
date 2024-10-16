@@ -1,4 +1,4 @@
-package com.healthCareAnalyzer.Health_Care_Backend.dto;
+package com.healthCareAnalyzer.Health_Care_Backend.dto.auth.register;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class RegisterRequestDto {
     @NotBlank
     @Email(message = "Invalid email id")
-    private String userName;
+    private String username;
     @NotBlank
     private String firstName;
     @NotBlank
@@ -28,5 +28,5 @@ public class RegisterRequestDto {
     private String confirmPassword;
     @NotBlank
     @Pattern(regexp = "^ROLE_.*")
-    private String roles;
+    private String role;
 }

@@ -1,4 +1,4 @@
-package com.healthCareAnalyzer.Health_Care_Backend.service;
+package com.healthCareAnalyzer.Health_Care_Backend.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -51,7 +51,7 @@ public class JwtService {
     public String generateJwtToken(String userName) {
 
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims,userName);
+        return createToken(claims, userName);
     }
 
     private static final String SECRET = "5367566B59153373367639792F423F4528482B4D6251655468576D5A71347437";
@@ -62,7 +62,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*30))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

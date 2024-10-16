@@ -1,8 +1,8 @@
-package com.healthCareAnalyzer.Health_Care_Backend.service;
+package com.healthCareAnalyzer.Health_Care_Backend.service.auth;
 
 import com.healthCareAnalyzer.Health_Care_Backend.config.UserInfoUserDetails;
 import com.healthCareAnalyzer.Health_Care_Backend.entity.UserEntity;
-import com.healthCareAnalyzer.Health_Care_Backend.repository.UserInfoRepository;
+import com.healthCareAnalyzer.Health_Care_Backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,11 +15,11 @@ import java.util.Optional;
 public class UserInfoUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserInfoRepository repository;
+    private UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserEntity> userInfo = repository.findByUserName(username);
+        Optional<UserEntity> userInfo = repository.findByUsername(username);
         return userInfo.map(UserInfoUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found " + username));
 
