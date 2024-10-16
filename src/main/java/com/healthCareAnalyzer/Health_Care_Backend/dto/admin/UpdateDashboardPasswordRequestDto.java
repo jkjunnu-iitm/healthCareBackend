@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateDashboardPasswordDto {
+public class UpdateDashboardPasswordRequestDto {
 
     @NotBlank
     @Size(min = 4, max = 20, message = "Min password length 4")

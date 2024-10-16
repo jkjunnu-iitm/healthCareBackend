@@ -28,4 +28,12 @@ public class UserEntity {
     @Column(nullable = false)
     private Boolean isEnabled;
 
+    public UserEntity(String username, String firstName, String lastName, String role) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
+
 }

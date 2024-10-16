@@ -24,11 +24,11 @@ public class LoginService {
     }
 
     public LoginResponseDto findUserByUsername(String username) {
-        Optional<UserEntity> userInfo = userRepository.findByUsername(username);
+        Optional<UserEntity> userInfo = userRepository.findUser(username);
         if (userInfo.isPresent()) {
             UserEntity user = userInfo.get();
             String token = jwtService.generateJwtToken(username);
-            return new LoginResponseDto(token, user.getUsername(), user.getFirstName(), user.getLastName(), user.getRole());
+            return new LoginResponseDto(token, user);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found with " + username);
         }
