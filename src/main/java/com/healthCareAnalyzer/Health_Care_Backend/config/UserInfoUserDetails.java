@@ -17,6 +17,7 @@ public class UserInfoUserDetails implements UserDetails {
     private final List<GrantedAuthority> authorities;
     private final Boolean isEnabled;
 
+
     public UserInfoUserDetails(UserEntity userEntity) {
         username = userEntity.getUsername();
         password = userEntity.getPassword();
