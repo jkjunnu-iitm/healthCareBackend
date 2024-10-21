@@ -15,7 +15,7 @@ public class AdminEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long adminId;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username")
+    @JoinColumn(name = "username")
     private UserEntity userEntity;
     private String dashboardPassword;
     private String phoneNumber;
