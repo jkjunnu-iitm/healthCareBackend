@@ -1,13 +1,10 @@
 package com.healthCareAnalyzer.Health_Care_Backend.repository;
 
 import com.healthCareAnalyzer.Health_Care_Backend.entity.AppointmentEntity;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
