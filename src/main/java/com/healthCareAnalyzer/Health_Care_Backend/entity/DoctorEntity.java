@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "doctor_table")
 @Data
@@ -18,5 +20,13 @@ public class DoctorEntity {
     @JoinColumn(name = "username", referencedColumnName = "username")
     private UserEntity userEntity;
     private String phoneNumber;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<AppointmentEntity> appointments;
+
+    public DoctorEntity(Long doctorId, UserEntity userEntity) {
+        this.doctorId = doctorId;
+        this.userEntity = userEntity;
+    }
 }
 

@@ -1,15 +1,19 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service.admin;
 
+import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.AddNewAppointmentSlotsRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.entity.*;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.*;
 import com.healthCareAnalyzer.Health_Care_Backend.service.auth.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -24,9 +28,10 @@ public class AdminService {
     private final DoctorRepository doctorRepository;
     private final PhlebotomistRepository phlebotomistRepository;
     private final ReceptionistRepository receptionistRepository;
+    private final AppointmentSlotRepository appointmentSlotRepository;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder, UserRepository userRepository, DoctorRepository doctorRepository, PhlebotomistRepository phlebotomistRepository, ReceptionistRepository receptionistRepository) {
+    public AdminService(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder, UserRepository userRepository, DoctorRepository doctorRepository, PhlebotomistRepository phlebotomistRepository, ReceptionistRepository receptionistRepository, AppointmentSlotRepository appointmentSlotRepository) {
         this.adminRepository = adminRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
@@ -34,6 +39,7 @@ public class AdminService {
         this.doctorRepository = doctorRepository;
         this.phlebotomistRepository = phlebotomistRepository;
         this.receptionistRepository = receptionistRepository;
+        this.appointmentSlotRepository = appointmentSlotRepository;
     }
 
 
@@ -120,5 +126,15 @@ public class AdminService {
             return new ResponseEntity<>("Role does not exist: " + role, HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @Transactional
+    public void addNewSlots(@Valid List<AddNewAppointmentSlotsRequestDto> addNewAppointmentSlotsRequestDto) {
+        for (AddNewAppointmentSlotsRequestDto addNewAppointmentSlots : addNewAppointmentSlotsRequestDto) {
+            AppointmentSlotEntity appointmentSlotEntity = new AppointmentSlotEntity();
+            appointmentSlotEntity.setStartTime(addNewAppointmentSlots.getStartTime());
+            appointmentSlotEntity.setEndTime(addNewAppointmentSlots.getEndTime());
+            appointmentSlotRepository.save(appointmentSlotEntity);
+        }
     }
 }

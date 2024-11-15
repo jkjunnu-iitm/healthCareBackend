@@ -5,22 +5,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Table(name = "patient_table")
+@Table(name = "appointment_slot_table")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientEntity {
+public class AppointmentSlotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long patientId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-    private UserEntity userEntity;
-    private String phoneNumber;
+    private Long slotId;
+    @Column(nullable = false)
+    private LocalTime startTime;
+    @Column(nullable = false)
+    private LocalTime endTime;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "slot")
     private List<AppointmentEntity> appointments;
 }
