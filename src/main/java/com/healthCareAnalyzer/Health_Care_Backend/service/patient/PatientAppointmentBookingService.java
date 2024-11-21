@@ -12,7 +12,6 @@ import com.healthCareAnalyzer.Health_Care_Backend.repository.AppointmentReposito
 import com.healthCareAnalyzer.Health_Care_Backend.repository.AppointmentSlotRepository;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.DoctorRepository;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.PatientRepository;
-import com.healthCareAnalyzer.Health_Care_Backend.service.auth.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

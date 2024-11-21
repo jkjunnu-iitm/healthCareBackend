@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Table(name = "appointment_slot_table")
@@ -21,5 +20,5 @@ public class AppointmentSlotEntity {
     private LocalTime startTime;
     @Column(nullable = false)
     private LocalTime endTime;
-    
+
 }
