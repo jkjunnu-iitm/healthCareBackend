@@ -21,8 +21,8 @@ public class DoctorEntity {
     private UserEntity userEntity;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "doctor")
-    private List<AppointmentEntity> appointments;
+//    @OneToMany(mappedBy = "doctor")
+//    private List<AppointmentEntity> appointments;
 
     public DoctorEntity(Long doctorId, UserEntity userEntity) {
         this.doctorId = doctorId;

@@ -21,6 +21,6 @@ public class PatientEntity {
     private UserEntity userEntity;
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "patient")
-    private List<AppointmentEntity> appointments;
+//    @OneToMany(mappedBy = "patient")
+//    private List<AppointmentEntity> appointments;
 }

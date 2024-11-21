@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -34,99 +35,40 @@ public class AdminController {
     }
 
     @PutMapping("/updateDashboardPassword")
-    public ResponseEntity<?> updateDashboardPassword(@RequestBody @Valid UpdateDashboardPasswordRequestDto updateDashboardPasswordRequestDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
-        try {
+    public ResponseEntity<?> updateDashboardPassword(@RequestBody @Valid UpdateDashboardPasswordRequestDto updateDashboardPasswordRequestDto, HttpServletRequest httpServletRequest) {
 
-            if (bindingResult.hasErrors()) {
-                log.info(bindingResult.getAllErrors().toString());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields are not valid");
-            }
-
-            return adminService.updateDashboardPassword(updateDashboardPasswordRequestDto.getOldPassword(), updateDashboardPasswordRequestDto.getNewPassword(), updateDashboardPasswordRequestDto.getRetypeNewPassword(), httpServletRequest);
-
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        return adminService.updateDashboardPassword(updateDashboardPasswordRequestDto.getOldPassword(), updateDashboardPasswordRequestDto.getNewPassword(), updateDashboardPasswordRequestDto.getRetypeNewPassword(), httpServletRequest);
 
     }
 
     @GetMapping("/fetchDisabledUsers")
     public ResponseEntity<?> fetchDisabledUsers() {
-        try {
 
-            return adminService.fetchDisabledUsers();
+        return adminService.fetchDisabledUsers();
 
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 
     @PutMapping("/enableDisabledUser")
-    public ResponseEntity<?> enableDisabledUser(@Valid @RequestBody UsernameDto usernameDto, BindingResult bindingResult) {
-        try {
+    public ResponseEntity<?> enableDisabledUser(@Valid @RequestBody UsernameDto usernameDto) {
 
-            if (!bindingResult.hasErrors()) {
+        return adminService.enableDisabledUser(usernameDto.getUsername());
 
-                return adminService.enableDisabledUser(usernameDto.getUsername());
-
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fields are not valid");
-            }
-
-
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 
     @DeleteMapping("/deleteDisabledUser")
-    public ResponseEntity<?> deleteDisabledUser(@Valid @RequestBody UsernameRoleDto usernameRoleDto, BindingResult bindingResult) {
-        try {
+    public ResponseEntity<?> deleteDisabledUser(@Valid @RequestBody UsernameRoleDto usernameRoleDto) {
 
-            if (!bindingResult.hasErrors()) {
+        return adminService.deleteDisabledUser(usernameRoleDto.getUsername(), usernameRoleDto.getRole());
 
-                return adminService.deleteDisabledUser(usernameRoleDto.getUsername(), usernameRoleDto.getRole());
 
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fields are not valid");
-            }
-
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 
     @PostMapping("/addNewSlots")
-    public ResponseEntity<?> addNewSlots(@Valid @RequestBody List<AddNewAppointmentSlotsRequestDto> addNewAppointmentSlotsRequestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> addNewSlots(@Valid @RequestBody List<AddNewAppointmentSlotsRequestDto> addNewAppointmentSlotsRequestDto) {
 
+        adminService.addNewSlots(addNewAppointmentSlotsRequestDto);
 
-        try {
-
-            if (bindingResult.hasErrors()) {
-                log.info(bindingResult.getAllErrors().toString());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields are not valid");
-            }
-
-            adminService.addNewSlots(addNewAppointmentSlotsRequestDto);
-
-            return ResponseEntity.status(HttpStatus.OK).body("Successfully added new slots");
-
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully added new slots");
 
     }
 

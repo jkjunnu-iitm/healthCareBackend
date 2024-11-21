@@ -34,4 +34,12 @@ public class AppointmentEntity {
     private LocalDate dateOfAppointment;
     @Column(nullable = false)
     private LocalDateTime dateOfBooking;
+
+    public AppointmentEntity(Long appointmentId, LocalDate dateOfAppointment, AppointmentSlotEntity slot, LocalDateTime dateOfBooking, Long patientId, String firstName, String lastName) {
+        this.appointmentId = appointmentId;
+        this.dateOfAppointment = dateOfAppointment;
+        this.slot = slot;
+        this.dateOfBooking = dateOfBooking;
+        this.patient.setPatientId(patientId);
+    }
 }

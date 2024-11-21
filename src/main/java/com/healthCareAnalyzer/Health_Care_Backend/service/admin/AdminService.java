@@ -1,5 +1,6 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service.admin;
 
+import com.healthCareAnalyzer.Health_Care_Backend.config.ExtractUsernameFromToken;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.AddNewAppointmentSlotsRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.entity.*;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.*;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -29,9 +31,10 @@ public class AdminService {
     private final PhlebotomistRepository phlebotomistRepository;
     private final ReceptionistRepository receptionistRepository;
     private final AppointmentSlotRepository appointmentSlotRepository;
+    private final ExtractUsernameFromToken extractUsernameFromToken;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder, UserRepository userRepository, DoctorRepository doctorRepository, PhlebotomistRepository phlebotomistRepository, ReceptionistRepository receptionistRepository, AppointmentSlotRepository appointmentSlotRepository) {
+    public AdminService(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder, UserRepository userRepository, DoctorRepository doctorRepository, PhlebotomistRepository phlebotomistRepository, ReceptionistRepository receptionistRepository, AppointmentSlotRepository appointmentSlotRepository, ExtractUsernameFromToken extractUsernameFromToken) {
         this.adminRepository = adminRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
@@ -40,52 +43,44 @@ public class AdminService {
         this.phlebotomistRepository = phlebotomistRepository;
         this.receptionistRepository = receptionistRepository;
         this.appointmentSlotRepository = appointmentSlotRepository;
+        this.extractUsernameFromToken = extractUsernameFromToken;
     }
 
 
     public ResponseEntity<?> updateDashboardPassword(String oldPassword, String newPassword, String retypeNewPassword, HttpServletRequest request) {
 
-        String authHeader;
-        authHeader = request.getHeader("Authorization");
-
         if (!newPassword.equals(retypeNewPassword)) {
-            return new ResponseEntity<>("Passwords dont match", HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Passwords dont match");
         }
 
         if (oldPassword.equals(newPassword)) {
-            return new ResponseEntity<>("New password cannot be the same as old password", HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password cannot be the same as old password");
         }
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
+        String username = extractUsernameFromToken.extractUsernameFromToken(request);
+        String currentPassword = adminRepository.findDashboardPassword(username);
+        if (passwordEncoder.matches(oldPassword, currentPassword)) {
 
-            String currentPassword = adminRepository.findDashboardPassword(username);
-            if (passwordEncoder.matches(oldPassword, currentPassword)) {
+            int result = adminRepository.updateDashboardPassword(username, passwordEncoder.encode(newPassword));
 
-                int result = adminRepository.updateDashboardPassword(username, passwordEncoder.encode(newPassword));
-
-                if (result == 1) {
-                    return new ResponseEntity<>("Successfully set dashboard password", HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("Update could not take place", HttpStatus.UNAUTHORIZED);
-                }
-
+            if (result == 1) {
+                return ResponseEntity.ok().body("Successfully set dashboard password");
             } else {
-                return new ResponseEntity<>("Old password does not match", HttpStatus.UNAUTHORIZED);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Update could not take place");
             }
 
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Old password does not match");
         }
-        return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
 
     }
 
     public ResponseEntity<?> fetchDisabledUsers() {
         List<UserEntity> disabledUsers = userRepository.findDisabledUsers();
         if (!disabledUsers.isEmpty()) {
-            return new ResponseEntity<>(disabledUsers, HttpStatus.OK);
+            return ResponseEntity.ok().body(disabledUsers);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No disabled users found");
         }
     }
 
@@ -95,11 +90,11 @@ public class AdminService {
         int result = userRepository.enableDisabledUser(username);
 
         if (result == 1) {
-            return new ResponseEntity<>("Successfully enabled " + username, HttpStatus.OK);
+            return ResponseEntity.ok().body("Successfully enabled " + username);
         } else if (result == 0) {
-            return new ResponseEntity<>("Nothing is updated, inappropriate input", HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nothing is updated, inappropriate input");
         } else {
-            return new ResponseEntity<>("Fatal error: More than 1 record updated", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Fatal error: More than 1 record updated");
         }
 
     }
@@ -117,13 +112,13 @@ public class AdminService {
 
         if (result == 1) {
             userRepository.deleteById(username);
-            return new ResponseEntity<>("Successfully deleted " + username, HttpStatus.OK);
+            return ResponseEntity.ok().body("Successfully deleted " + username);
         } else if (result == 0) {
-            return new ResponseEntity<>("Nothing is deleted, inappropriate input", HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nothing is deleted, inappropriate input");
         } else if (result > 1) {
-            return new ResponseEntity<>("Fatal error: More than 1 record deleted", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Fatal error: More than 1 record deleted");
         } else {
-            return new ResponseEntity<>("Role does not exist: " + role, HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role does not exist: " + role);
         }
 
     }

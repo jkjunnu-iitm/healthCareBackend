@@ -21,7 +21,5 @@ public class AppointmentSlotEntity {
     private LocalTime startTime;
     @Column(nullable = false)
     private LocalTime endTime;
-
-    @OneToMany(mappedBy = "slot")
-    private List<AppointmentEntity> appointments;
+    
 }

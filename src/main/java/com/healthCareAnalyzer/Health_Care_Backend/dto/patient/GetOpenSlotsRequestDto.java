@@ -17,6 +17,6 @@ public class GetOpenSlotsRequestDto {
     private Long doctorId;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Future
+    @Future(message = "Select a date in the future")
     private LocalDate dateOfAppointment;
 }

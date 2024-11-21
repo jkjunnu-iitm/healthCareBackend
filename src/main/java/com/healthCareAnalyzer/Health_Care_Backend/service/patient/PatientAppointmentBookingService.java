@@ -1,5 +1,6 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service.patient;
 
+import com.healthCareAnalyzer.Health_Care_Backend.config.ExtractUsernameFromToken;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.BookAppointmentRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.GetAllDoctorsResponseDto;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.GetOpenSlotsRequestDto;
@@ -16,7 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,13 +35,15 @@ public class PatientAppointmentBookingService {
     private final AppointmentSlotRepository appointmentSlotRepository;
     private final JwtService jwtService;
     private final PatientRepository patientRepository;
+    private final ExtractUsernameFromToken extractUsernameFromToken;
 
-    public PatientAppointmentBookingService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AppointmentSlotRepository appointmentSlotRepository, JwtService jwtService, PatientRepository patientRepository) {
+    public PatientAppointmentBookingService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AppointmentSlotRepository appointmentSlotRepository, JwtService jwtService, PatientRepository patientRepository, ExtractUsernameFromToken extractUsernameFromToken) {
         this.doctorRepository = doctorRepository;
         this.appointmentRepository = appointmentRepository;
         this.appointmentSlotRepository = appointmentSlotRepository;
         this.jwtService = jwtService;
         this.patientRepository = patientRepository;
+        this.extractUsernameFromToken = extractUsernameFromToken;
     }
 
     public List<GetAllDoctorsResponseDto> getAllDoctors() {
@@ -58,13 +63,10 @@ public class PatientAppointmentBookingService {
         List<Long> bookedSlotIds = appointmentRepository.findOpenSlots(openSlotsRequestDto.getDoctorId(), openSlotsRequestDto.getDateOfAppointment());
         List<AppointmentSlotEntity> appointmentSlotEntityList = appointmentSlotRepository.findAll();
 
-        List<Long> defaultSlotIds = new ArrayList<>();
-        for (AppointmentSlotEntity appointmentSlotEntity : appointmentSlotEntityList) {
-            defaultSlotIds.add(appointmentSlotEntity.getSlotId());
+        for (Long slotId : bookedSlotIds) {
+            appointmentSlotEntityList.removeIf(appointmentSlotEntity -> slotId.equals(appointmentSlotEntity.getSlotId()));
         }
-
-        defaultSlotIds.removeAll(bookedSlotIds);
-        return ResponseEntity.ok(defaultSlotIds);
+        return ResponseEntity.ok(appointmentSlotEntityList);
     }
 
     public ResponseEntity<?> bookAppointment(@Valid BookAppointmentRequestDto bookAppointmentRequestDto, HttpServletRequest httpServletRequest) {
@@ -72,48 +74,40 @@ public class PatientAppointmentBookingService {
         Optional<DoctorEntity> doctor = doctorRepository.findById(bookAppointmentRequestDto.getDoctorId());
 
         if (doctor.isEmpty()) {
-            return ResponseEntity.badRequest().body("Doctor not found");
+            throw new UsernameNotFoundException("Doctor not found");
         }
 
         Optional<AppointmentSlotEntity> appointmentSlotEntity = appointmentSlotRepository.findById(bookAppointmentRequestDto.getSlotId());
 
         if (appointmentSlotEntity.isEmpty()) {
-            return ResponseEntity.badRequest().body("Slot not found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Slot not found");
         }
 
-        String authHeader;
-        authHeader = httpServletRequest.getHeader("Authorization");
+        String username = extractUsernameFromToken.extractUsernameFromToken(httpServletRequest);
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
+        PatientEntity patientEntity = patientRepository.findByUserEntity_Username(username);
 
-            PatientEntity patientEntity = patientRepository.findByUserEntity_Username(username);
+        List<String> stageHistoryList = appointmentRepository.findStageByPatientId(patientEntity.getPatientId());
 
-            List<String> stageHistoryList = appointmentRepository.findStageByPatientId(patientEntity.getPatientId());
-
-            if (!stageHistoryList.isEmpty()) {
-                for (String stage : stageHistoryList) {
-                    if (!Objects.equals(stage, "completed")) {
-                        return ResponseEntity.badRequest().body("Cannot book an appointment, another appointment is ongoing");
-                    }
+        if (!stageHistoryList.isEmpty()) {
+            for (String stage : stageHistoryList) {
+                if (!Objects.equals(stage, "completed")) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot book an appointment, another appointment is ongoing");
                 }
             }
-
-            AppointmentEntity appointmentEntity = new AppointmentEntity();
-            appointmentEntity.setPatient(patientEntity);
-            appointmentEntity.setDoctor(doctor.get());
-            appointmentEntity.setDateOfAppointment(bookAppointmentRequestDto.getDateOfAppointment());
-            appointmentEntity.setDateOfBooking(LocalDateTime.now());
-            appointmentEntity.setStage("approval");
-            appointmentEntity.setSlot(appointmentSlotEntity.get());
-
-            appointmentRepository.save(appointmentEntity);
-
-            return ResponseEntity.ok().body("Appointment booked successfully");
-
         }
-        return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+
+        AppointmentEntity appointmentEntity = new AppointmentEntity();
+        appointmentEntity.setPatient(patientEntity);
+        appointmentEntity.setDoctor(doctor.get());
+        appointmentEntity.setDateOfAppointment(bookAppointmentRequestDto.getDateOfAppointment());
+        appointmentEntity.setDateOfBooking(LocalDateTime.now());
+        appointmentEntity.setStage("approval");
+        appointmentEntity.setSlot(appointmentSlotEntity.get());
+
+        appointmentRepository.save(appointmentEntity);
+
+        return ResponseEntity.ok().body("Appointment booked successfully");
 
 
     }

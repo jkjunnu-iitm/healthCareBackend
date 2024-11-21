@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -87,4 +88,14 @@ public class RegisterService {
     }
 
 
+    public ResponseEntity<?> registerUser(@Valid RegisterRequestDto registerRequestDto) throws Exception {
+        Boolean isUserAdded = addUser(registerRequestDto);
+        if (isUserAdded) {
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+
+        } else {
+            throw new Exception("User could not be registered");
+        }
+    }
 }

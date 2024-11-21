@@ -31,62 +31,23 @@ public class PatientController {
     @GetMapping("/getAllDoctors")
     public ResponseEntity<?> getAllDoctors() {
 
-        try {
-
-            List<GetAllDoctorsResponseDto> doctorsDtoList = patientAppointmentBookingService.getAllDoctors();
-            return new ResponseEntity<>(doctorsDtoList, HttpStatus.OK);
-
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        List<GetAllDoctorsResponseDto> doctorsDtoList = patientAppointmentBookingService.getAllDoctors();
+        return ResponseEntity.status(HttpStatus.OK).body(doctorsDtoList);
 
     }
 
-    @GetMapping("/getOpenSlots")
-    public ResponseEntity<?> getOpenSlots(@Valid @RequestBody GetOpenSlotsRequestDto openSlotsRequestDto, BindingResult bindingResult) {
+    @PostMapping("/getOpenSlots")
+    public ResponseEntity<?> getOpenSlots(@Valid @RequestBody GetOpenSlotsRequestDto openSlotsRequestDto) {
 
-        try {
+        return patientAppointmentBookingService.getOpenSlots(openSlotsRequestDto);
 
-            if (bindingResult.hasErrors()) {
-                log.info(bindingResult.getAllErrors().toString());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields are not valid");
-            }
-
-            return patientAppointmentBookingService.getOpenSlots(openSlotsRequestDto);
-
-
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 
     @PostMapping("/bookAppointment")
-    public ResponseEntity<?> bookAppointment(@Valid @RequestBody BookAppointmentRequestDto bookAppointmentRequestDto, BindingResult bindingResult, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> bookAppointment(@Valid @RequestBody BookAppointmentRequestDto bookAppointmentRequestDto, HttpServletRequest httpServletRequest) {
 
-        try {
-            if (bindingResult.hasErrors()) {
-                log.info(bindingResult.getAllErrors().toString());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fields are not valid");
-            }
+        return patientAppointmentBookingService.bookAppointment(bookAppointmentRequestDto, httpServletRequest);
 
-            return patientAppointmentBookingService.bookAppointment(bookAppointmentRequestDto, httpServletRequest);
-
-
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getMessage());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            log.info(e.getClass().getName());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 }
 
