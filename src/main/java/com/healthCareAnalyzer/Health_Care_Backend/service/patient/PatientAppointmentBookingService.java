@@ -33,15 +33,13 @@ public class PatientAppointmentBookingService {
     private final DoctorRepository doctorRepository;
     private final AppointmentRepository appointmentRepository;
     private final AppointmentSlotRepository appointmentSlotRepository;
-    private final JwtService jwtService;
     private final PatientRepository patientRepository;
     private final ExtractUsernameFromToken extractUsernameFromToken;
 
-    public PatientAppointmentBookingService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AppointmentSlotRepository appointmentSlotRepository, JwtService jwtService, PatientRepository patientRepository, ExtractUsernameFromToken extractUsernameFromToken) {
+    public PatientAppointmentBookingService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AppointmentSlotRepository appointmentSlotRepository, PatientRepository patientRepository, ExtractUsernameFromToken extractUsernameFromToken) {
         this.doctorRepository = doctorRepository;
         this.appointmentRepository = appointmentRepository;
         this.appointmentSlotRepository = appointmentSlotRepository;
-        this.jwtService = jwtService;
         this.patientRepository = patientRepository;
         this.extractUsernameFromToken = extractUsernameFromToken;
     }

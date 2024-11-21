@@ -1,6 +1,5 @@
 package com.healthCareAnalyzer.Health_Care_Backend.controller.doctor;
 
-import com.healthCareAnalyzer.Health_Care_Backend.entity.AppointmentEntity;
 import com.healthCareAnalyzer.Health_Care_Backend.service.appointment.AppointmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

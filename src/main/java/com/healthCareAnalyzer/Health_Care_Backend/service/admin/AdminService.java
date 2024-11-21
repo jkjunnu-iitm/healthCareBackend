@@ -4,7 +4,6 @@ import com.healthCareAnalyzer.Health_Care_Backend.config.ExtractUsernameFromToke
 import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.AddNewAppointmentSlotsRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.entity.*;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.*;
-import com.healthCareAnalyzer.Health_Care_Backend.service.auth.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ import java.util.List;
 public class AdminService {
 
     private final AdminRepository adminRepository;
-    private final JwtService jwtService;
+
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
@@ -34,9 +33,8 @@ public class AdminService {
     private final ExtractUsernameFromToken extractUsernameFromToken;
 
     @Autowired
-    public AdminService(AdminRepository adminRepository, JwtService jwtService, PasswordEncoder passwordEncoder, UserRepository userRepository, DoctorRepository doctorRepository, PhlebotomistRepository phlebotomistRepository, ReceptionistRepository receptionistRepository, AppointmentSlotRepository appointmentSlotRepository, ExtractUsernameFromToken extractUsernameFromToken) {
+    public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, DoctorRepository doctorRepository, PhlebotomistRepository phlebotomistRepository, ReceptionistRepository receptionistRepository, AppointmentSlotRepository appointmentSlotRepository, ExtractUsernameFromToken extractUsernameFromToken) {
         this.adminRepository = adminRepository;
-        this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
