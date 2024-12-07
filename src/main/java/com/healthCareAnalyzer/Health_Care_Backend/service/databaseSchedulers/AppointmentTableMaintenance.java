@@ -1,4 +1,4 @@
-package com.healthCareAnalyzer.Health_Care_Backend.service.databaseMaintenance;
+package com.healthCareAnalyzer.Health_Care_Backend.service.databaseSchedulers;
 
 import com.healthCareAnalyzer.Health_Care_Backend.repository.AppointmentRepository;
 import lombok.extern.slf4j.Slf4j;

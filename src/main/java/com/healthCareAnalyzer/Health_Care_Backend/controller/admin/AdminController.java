@@ -1,10 +1,12 @@
 package com.healthCareAnalyzer.Health_Care_Backend.controller.admin;
 
-import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.AddNewAppointmentSlotsRequestDto;
-import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.UpdateDashboardPasswordRequestDto;
-import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.UsernameDto;
-import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.UsernameRoleDto;
+import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.*;
+import com.healthCareAnalyzer.Health_Care_Backend.dto.labTest.AddNewLabTestRequestDto;
+import com.healthCareAnalyzer.Health_Care_Backend.dto.medicineInventory.AddNewMedicineInventoryRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.service.admin.AdminService;
+import com.healthCareAnalyzer.Health_Care_Backend.service.labTest.LabTestService;
+import com.healthCareAnalyzer.Health_Care_Backend.service.medicineInventory.MedicineInventoryService;
+import com.healthCareAnalyzer.Health_Care_Backend.service.stage.StageService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +26,17 @@ public class AdminController {
 
 
     private final AdminService adminService;
+    private final StageService stageService;
+    private final LabTestService labTestService;
+    private final MedicineInventoryService medicineInventoryService;
 
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, StageService stageService, LabTestService labTestService, MedicineInventoryService medicineInventoryService) {
         this.adminService = adminService;
+        this.stageService = stageService;
+        this.labTestService = labTestService;
+        this.medicineInventoryService = medicineInventoryService;
     }
 
     @PutMapping("/updateDashboardPassword")
@@ -66,6 +74,26 @@ public class AdminController {
         adminService.addNewSlots(addNewAppointmentSlotsRequestDto);
 
         return ResponseEntity.status(HttpStatus.OK).body("Successfully added new slots");
+
+    }
+
+    @PostMapping("/addNewStages")
+    public ResponseEntity<?> addNewStages(@Valid @RequestBody AddNewStagesRequestDto addNewStagesRequestDto) {
+
+        return stageService.addNewStages(addNewStagesRequestDto.getStageList());
+    }
+
+    @PostMapping("/addNewLabTests")
+    public ResponseEntity<?> addNewLabTests(@Valid @RequestBody List<AddNewLabTestRequestDto> addNewLabTestRequestDtoList) {
+
+        return labTestService.addNewLabTests(addNewLabTestRequestDtoList);
+
+    }
+
+    @PostMapping("/addNewMedicines")
+    public ResponseEntity<?> addNewMedicines(@Valid @RequestBody List<AddNewMedicineInventoryRequestDto> addNewMedicineInventoryRequestDtoList) {
+
+        return medicineInventoryService.addNewMedicines(addNewMedicineInventoryRequestDtoList);
 
     }
 

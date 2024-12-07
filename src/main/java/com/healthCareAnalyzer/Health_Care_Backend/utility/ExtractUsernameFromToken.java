@@ -1,4 +1,4 @@
-package com.healthCareAnalyzer.Health_Care_Backend.config;
+package com.healthCareAnalyzer.Health_Care_Backend.utility;
 
 import com.healthCareAnalyzer.Health_Care_Backend.service.auth.JwtService;
 import jakarta.servlet.http.HttpServletRequest;

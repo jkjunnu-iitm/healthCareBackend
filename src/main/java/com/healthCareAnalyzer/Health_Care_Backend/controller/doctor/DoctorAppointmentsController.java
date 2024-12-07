@@ -1,13 +1,13 @@
 package com.healthCareAnalyzer.Health_Care_Backend.controller.doctor;
 
+import com.healthCareAnalyzer.Health_Care_Backend.dto.doctor.UpdateStageRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.service.appointment.AppointmentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/doctor/appointment")
@@ -25,5 +25,21 @@ public class DoctorAppointmentsController {
     public ResponseEntity<?> getAllAppointmentsWaitingForApproval(HttpServletRequest request) {
         return appointmentService.getAllAppointmentsWaitingForApproval(request);
     }
+
+    @PostMapping("/updateStage")
+    public ResponseEntity<?> updateStage(@Valid @RequestBody UpdateStageRequestDto updateStageRequestDtoList, HttpServletRequest request) {
+        return appointmentService.updateStage(updateStageRequestDtoList, request);
+    }
+
+    @GetMapping("/getAllUpcomingAppointments")
+    public ResponseEntity<?> getAllUpcomingAppointments(HttpServletRequest request) {
+        return appointmentService.getAllUpcomingAppointments(request);
+    }
+
+    @GetMapping("/getUpcomingAppointmentBYId")
+    public ResponseEntity<?> getUpcomingAppointmentById(@RequestParam(name = "aptId") Long appointmentId, HttpServletRequest request) {
+        return appointmentService.getUpcomingAppointmentById(appointmentId, request);
+    }
+
 
 }

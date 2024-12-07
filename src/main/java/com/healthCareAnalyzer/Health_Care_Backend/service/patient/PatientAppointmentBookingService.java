@@ -1,6 +1,6 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service.patient;
 
-import com.healthCareAnalyzer.Health_Care_Backend.config.ExtractUsernameFromToken;
+import com.healthCareAnalyzer.Health_Care_Backend.utility.ExtractUsernameFromToken;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.BookAppointmentRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.GetAllDoctorsResponseDto;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.GetOpenSlotsRequestDto;

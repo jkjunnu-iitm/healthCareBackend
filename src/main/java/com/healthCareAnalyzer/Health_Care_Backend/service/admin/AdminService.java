@@ -1,6 +1,6 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service.admin;
 
-import com.healthCareAnalyzer.Health_Care_Backend.config.ExtractUsernameFromToken;
+import com.healthCareAnalyzer.Health_Care_Backend.utility.ExtractUsernameFromToken;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.admin.AddNewAppointmentSlotsRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.entity.*;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.*;
@@ -75,11 +75,8 @@ public class AdminService {
 
     public ResponseEntity<?> fetchDisabledUsers() {
         List<UserEntity> disabledUsers = userRepository.findDisabledUsers();
-        if (!disabledUsers.isEmpty()) {
-            return ResponseEntity.ok().body(disabledUsers);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No disabled users found");
-        }
+        return ResponseEntity.ok().body(disabledUsers);
+
     }
 
 

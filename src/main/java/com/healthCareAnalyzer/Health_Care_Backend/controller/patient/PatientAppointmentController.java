@@ -3,6 +3,7 @@ package com.healthCareAnalyzer.Health_Care_Backend.controller.patient;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.BookAppointmentRequestDto;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.GetAllDoctorsResponseDto;
 import com.healthCareAnalyzer.Health_Care_Backend.dto.patient.GetOpenSlotsRequestDto;
+import com.healthCareAnalyzer.Health_Care_Backend.service.appointment.AppointmentService;
 import com.healthCareAnalyzer.Health_Care_Backend.service.patient.PatientAppointmentBookingService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -15,15 +16,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/patient")
+@RequestMapping("/patient/appointment")
 @PreAuthorize("hasAuthority('ROLE_PATIENT')")
 @Slf4j
-public class PatientController {
+public class PatientAppointmentController {
 
     private final PatientAppointmentBookingService patientAppointmentBookingService;
+    private final AppointmentService appointmentService;
 
-    public PatientController(PatientAppointmentBookingService patientAppointmentBookingService) {
+    public PatientAppointmentController(PatientAppointmentBookingService patientAppointmentBookingService, AppointmentService appointmentService) {
         this.patientAppointmentBookingService = patientAppointmentBookingService;
+        this.appointmentService = appointmentService;
     }
 
     @GetMapping("/getAllDoctors")
@@ -46,6 +49,11 @@ public class PatientController {
 
         return patientAppointmentBookingService.bookAppointment(bookAppointmentRequestDto, httpServletRequest);
 
+    }
+
+    @GetMapping("/getAppointmentDetails")
+    public ResponseEntity<?> getAppointmentDetails(HttpServletRequest httpServletRequest) {
+        return appointmentService.getAppointmentDetailsByPatientId(httpServletRequest);
     }
 }
 
