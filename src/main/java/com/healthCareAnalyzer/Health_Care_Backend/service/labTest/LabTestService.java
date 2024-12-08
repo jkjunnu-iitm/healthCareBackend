@@ -27,7 +27,6 @@ public class LabTestService {
 
     public ResponseEntity<?> addNewLabTests(@Valid List<AddNewLabTestRequestDto> addNewLabTestRequestDtoList) {
 
-        labTestsRepository.deleteAll();
         List<LabTestsEntity> labTestsEntityList = new ArrayList<>();
         for (AddNewLabTestRequestDto addNewLabTestRequestDto : addNewLabTestRequestDtoList) {
             LabTestsEntity labTestsEntity = new LabTestsEntity();
