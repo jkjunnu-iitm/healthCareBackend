@@ -39,7 +39,7 @@ public class AdminController {
         this.medicineInventoryService = medicineInventoryService;
     }
 
-    @PutMapping("/updateDashboardPassword")
+    @PostMapping("/updateDashboardPassword")
     public ResponseEntity<?> updateDashboardPassword(@RequestBody @Valid UpdateDashboardPasswordRequestDto updateDashboardPasswordRequestDto, HttpServletRequest httpServletRequest) {
 
         return adminService.updateDashboardPassword(updateDashboardPasswordRequestDto.getOldPassword(), updateDashboardPasswordRequestDto.getNewPassword(), updateDashboardPasswordRequestDto.getRetypeNewPassword(), httpServletRequest);
@@ -53,7 +53,7 @@ public class AdminController {
 
     }
 
-    @PutMapping("/enableDisabledUser")
+    @PostMapping("/enableDisabledUser")
     public ResponseEntity<?> enableDisabledUser(@Valid @RequestBody UsernameDto usernameDto) {
 
         return adminService.enableDisabledUser(usernameDto.getUsername());

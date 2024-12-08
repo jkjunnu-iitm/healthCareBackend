@@ -61,7 +61,7 @@ public class AppointmentService {
             return true;
         }
 
-        if (currentStageName.equals("doctor_v1") && stageName.equals("prescription")) {
+        if (currentStageName.equals("doctor_v1") && stageName.equals("receptionist")) {
             return true;
         }
 

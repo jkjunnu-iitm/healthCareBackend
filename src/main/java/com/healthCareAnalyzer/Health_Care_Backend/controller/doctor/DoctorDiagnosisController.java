@@ -54,17 +54,17 @@ public class DoctorDiagnosisController {
         return appointmentService.updateStage(updateStageRequestDtoList, request);
     }
 
-    @PutMapping("/createPhlebotomistTestRecord")
+    @PostMapping("/createPhlebotomistTestRecord")
     public ResponseEntity<?> createPhlebotomistTestRecord(@Valid @RequestBody CreatePhlebotomistTestRecordDto createPhlebotomistTestRecordDto) {
         return phlebotomistTestService.createPhlebotomistTestRecord(createPhlebotomistTestRecordDto);
     }
 
-    @PutMapping("/createPrescriptionRecord")
+    @PostMapping("/createPrescriptionRecord")
     public ResponseEntity<?> createPrescriptionRecord(@Valid @RequestBody CreatePrescriptionRecordDto createPrescriptionRecordDto) {
         return prescriptionService.createPrescriptionRecord(createPrescriptionRecordDto);
     }
 
-    @PutMapping("/createDoctorFeedbackRecord")
+    @PostMapping("/createDoctorFeedbackRecord")
     public ResponseEntity<?> createDoctorFeedbackRecord(@Valid @RequestBody CreateDoctorFeedbackRecordDto createDoctorFeedbackRecordDto) {
         return doctorFeedbackService.createDoctorFeedbackRecord(createDoctorFeedbackRecordDto);
     }
