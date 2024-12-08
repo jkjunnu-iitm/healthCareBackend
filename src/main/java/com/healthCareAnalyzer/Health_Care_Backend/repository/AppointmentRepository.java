@@ -36,12 +36,12 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     @Query("UPDATE AppointmentEntity a SET a.stage=?3 WHERE a.appointmentId=?1 and a.doctor.userEntity.username=?2")
     int updateStageByIdAndDoctor(@NotBlank Long appointmentId, String username, String stageName);
 
-    @Query("SELECT new AppointmentEntity (a.appointmentId,a.patient,a.slot,a.dateOfAppointment,a.dateOfBooking) FROM AppointmentEntity a WHERE a.doctor.userEntity.username=?1 and a.stage='doctor_v1' ")
+    @Query("SELECT new AppointmentEntity (a.appointmentId,a.patient,a.slot,a.dateOfAppointment,a.dateOfBooking) FROM AppointmentEntity a WHERE a.doctor.userEntity.username=?1 and a.stage in ('doctor_v1','doctor_v2') ")
     List<AppointmentEntity> findAllUpcomingAppointments(String username);
 
     List<AppointmentEntity> findByAppointmentIdAndDoctor_UserEntity_Username(Long appointmentId, String username);
 
     Optional<AppointmentEntity> findByAppointmentIdAndDoctor_UserEntity_UsernameAndStageNotIn(Long appointmentId, String doctor_userEntity_username, Collection<String> stage);
 
-    Optional<AppointmentEntity> findByPatient_UserEntity_Username(String username);
+    List<AppointmentEntity> findByPatient_UserEntity_Username(String username);
 }

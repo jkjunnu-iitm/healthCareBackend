@@ -142,11 +142,7 @@ public class AppointmentService {
 
     public ResponseEntity<?> getAppointmentDetailsByPatientId(HttpServletRequest httpServletRequest) {
         String username = extractUsernameFromToken.extractUsernameFromToken(httpServletRequest);
-        Optional<AppointmentEntity> optionalAppointmentEntity = appointmentRepository.findByPatient_UserEntity_Username(username);
-        if (optionalAppointmentEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid appointment id");
-        }
-        AppointmentEntity appointmentEntity = optionalAppointmentEntity.get();
-        return ResponseEntity.ok(appointmentEntity);
+        List<AppointmentEntity> appointmentEntityList = appointmentRepository.findByPatient_UserEntity_Username(username);
+        return ResponseEntity.ok(appointmentEntityList);
     }
 }
