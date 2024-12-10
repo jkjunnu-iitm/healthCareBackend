@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.patient;
 
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,12 +13,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookAppointmentRequestDto {
-    @NotEmpty
+    @NotNull
     private Long doctorId;
-    @NotEmpty
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future
     private LocalDate dateOfAppointment;
-    @NotEmpty
+    @NotNull
     private Long slotId;
 }

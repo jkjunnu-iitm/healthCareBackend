@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.phlebotomist;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveLabTestRecordsDto {
-    @NotEmpty
+    @NotNull
     private Long phlebotomistTestId;
-    @NotEmpty
+    @NotNull
     private Long appointmentId;
     @NotBlank
     private String labTestRecords;

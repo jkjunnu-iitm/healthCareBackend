@@ -1,6 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.prescription;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreatePrescriptionRecordDto {
-    @NotEmpty
+    @NotNull
     private Long appointmentId;
     @NotEmpty
     private List<Long> medicineIds;
