@@ -1,6 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.labTest;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddNewLabTestRequestDto {
 
-    @NotNull
+    @NotBlank
     private String labTestName;
-    @NotNull
+    @NotEmpty
     private String[] labTestFields;
 
 }

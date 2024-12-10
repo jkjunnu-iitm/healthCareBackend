@@ -48,7 +48,7 @@ public class PrescriptionService {
     }
 
     public ResponseEntity<?> getAllPendingPrescriptions() {
-        return ResponseEntity.status(HttpStatus.OK).body(prescriptionRepository.findByAppointmentEntity_Stage("prescription"));
+        return ResponseEntity.status(HttpStatus.OK).body(prescriptionRepository.findByAppointmentEntity_Stage("receptionist"));
     }
 
 

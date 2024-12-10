@@ -48,7 +48,7 @@ public class AdminService {
     public ResponseEntity<?> updateDashboardPassword(String oldPassword, String newPassword, String retypeNewPassword, HttpServletRequest request) {
 
         if (!newPassword.equals(retypeNewPassword)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Passwords dont match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passwords dont match");
         }
 
         if (oldPassword.equals(newPassword)) {
@@ -64,11 +64,11 @@ public class AdminService {
             if (result == 1) {
                 return ResponseEntity.ok().body("Successfully set dashboard password");
             } else {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Update could not take place");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Update could not take place");
             }
 
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Old password does not match");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password does not match");
         }
 
     }

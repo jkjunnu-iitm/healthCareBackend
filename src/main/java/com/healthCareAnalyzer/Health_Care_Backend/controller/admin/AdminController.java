@@ -60,7 +60,7 @@ public class AdminController {
 
     }
 
-    @DeleteMapping("/deleteDisabledUser")
+    @PostMapping("/deleteDisabledUser")
     public ResponseEntity<?> deleteDisabledUser(@Valid @RequestBody UsernameRoleDto usernameRoleDto) {
 
         return adminService.deleteDisabledUser(usernameRoleDto.getUsername(), usernameRoleDto.getRole());

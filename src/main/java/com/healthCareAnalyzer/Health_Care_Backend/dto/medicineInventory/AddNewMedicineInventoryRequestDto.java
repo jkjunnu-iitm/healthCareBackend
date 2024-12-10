@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.medicineInventory;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddNewMedicineInventoryRequestDto {
 
-    @NotNull
+    @NotBlank
     public String medicineName;
-    @NotNull
+    @NotEmpty
     private Integer medicineQuantity;
     @NotBlank
     private String medicineSerialNumber;

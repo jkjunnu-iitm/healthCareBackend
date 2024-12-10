@@ -1,6 +1,6 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.admin;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,10 +12,10 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddNewAppointmentSlotsRequestDto {
-    @NotNull
+    @NotEmpty
     @DateTimeFormat(pattern = "HH:mm:ss")
     private LocalTime startTime;
-    @NotNull
+    @NotEmpty
     @DateTimeFormat(pattern = "HH:mm:ss")
     private LocalTime endTime;
 }

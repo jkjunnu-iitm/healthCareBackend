@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.doctor;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateStageRequestDto {
-    @NotNull
+    @NotEmpty
     private Long appointmentId;
     @NotBlank
     private String stageName;

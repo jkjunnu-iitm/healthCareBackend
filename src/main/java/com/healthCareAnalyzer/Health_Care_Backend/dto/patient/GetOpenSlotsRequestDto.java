@@ -1,7 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.dto.patient;
 
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,9 +13,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetOpenSlotsRequestDto {
-    @NotNull
+    @NotEmpty
     private Long doctorId;
-    @NotNull
+    @NotEmpty
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future(message = "Select a date in the future")
     private LocalDate dateOfAppointment;
