@@ -19,13 +19,13 @@ import java.util.Optional;
 @Service
 public class PrescriptionService {
     private final AppointmentRepository appointmentRepository;
-    private final MedicineInventoryRepository medicineInventoryRepository;
     private final PrescriptionRepository prescriptionRepository;
+    private final MedicineInventoryRepository medicineInventoryRepository;
 
-    public PrescriptionService(AppointmentRepository appointmentRepository, MedicineInventoryRepository medicineInventoryRepository, PrescriptionRepository prescriptionRepository) {
+    public PrescriptionService(AppointmentRepository appointmentRepository, PrescriptionRepository prescriptionRepository, MedicineInventoryRepository medicineInventoryRepository) {
         this.appointmentRepository = appointmentRepository;
-        this.medicineInventoryRepository = medicineInventoryRepository;
         this.prescriptionRepository = prescriptionRepository;
+        this.medicineInventoryRepository = medicineInventoryRepository;
     }
 
     public ResponseEntity<?> createPrescriptionRecord(@Valid CreatePrescriptionRecordDto createPrescriptionRecordDto) {
@@ -35,11 +35,15 @@ public class PrescriptionService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
         }
 
-        List<MedicineInventoryEntity> medicineInventoryEntityList = medicineInventoryRepository.findAllById(createPrescriptionRecordDto.getMedicineIds());
+        List<MedicineInventoryEntity> medicineInventoryEntityList = medicineInventoryRepository.findByMedicineIdIn(createPrescriptionRecordDto.getMedicineIds());
+
+        if (medicineInventoryEntityList.size() != createPrescriptionRecordDto.getMedicineIds().size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medicine Ids do not exist");
+        }
 
         PrescriptionEntity prescriptionEntity = new PrescriptionEntity();
         prescriptionEntity.setAppointmentEntity(optionalAppointmentEntity.get());
-        prescriptionEntity.setMedicineInventoryEntity(medicineInventoryEntityList);
+        prescriptionEntity.setMedicineIds(createPrescriptionRecordDto.getMedicineIds().toArray(new Long[0]));
 
         prescriptionRepository.save(prescriptionEntity);
 

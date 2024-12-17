@@ -20,13 +20,13 @@ import java.util.Optional;
 @Service
 public class PhlebotomistTestService {
     private final AppointmentRepository appointmentRepository;
-    private final LabTestsRepository labTestsRepository;
     private final PhlebotomistTestRepository phlebotomistTestRepository;
+    private final LabTestsRepository labTestsRepository;
 
     public PhlebotomistTestService(AppointmentRepository appointmentRepository, PhlebotomistTestRepository phlebotomistTestRepository, LabTestsRepository labTestsRepository) {
         this.appointmentRepository = appointmentRepository;
-        this.labTestsRepository = labTestsRepository;
         this.phlebotomistTestRepository = phlebotomistTestRepository;
+        this.labTestsRepository = labTestsRepository;
     }
 
     public ResponseEntity<?> createPhlebotomistTestRecord(@Valid CreatePhlebotomistTestRecordDto createPhlebotomistTestRecordDto) {
@@ -36,10 +36,15 @@ public class PhlebotomistTestService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
         }
 
+        List<LabTestsEntity> labTestsEntityList = labTestsRepository.findByLabTestIdIn(createPhlebotomistTestRecordDto.getLabTestIds());
+
+        if (labTestsEntityList.size() != createPhlebotomistTestRecordDto.getLabTestIds().size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lab test Ids do not exist");
+        }
+
         PhlebotomistTestEntity phlebotomistTestEntity = new PhlebotomistTestEntity();
-        List<LabTestsEntity> labTestsEntityList = labTestsRepository.findAllById(createPhlebotomistTestRecordDto.getLabTestIds());
         phlebotomistTestEntity.setAppointmentEntity(appointmentEntity.get());
-        phlebotomistTestEntity.setLabTestsEntities(labTestsEntityList);
+        phlebotomistTestEntity.setLabTestIds(createPhlebotomistTestRecordDto.getLabTestIds().toArray(new Long[0]));
 
         phlebotomistTestRepository.save(phlebotomistTestEntity);
 

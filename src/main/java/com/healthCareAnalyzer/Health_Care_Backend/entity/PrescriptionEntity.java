@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table(name = "prescription_table")
 @Data
@@ -19,9 +17,8 @@ public class PrescriptionEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "appointment_id")
     private AppointmentEntity appointmentEntity;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "medicine_ids")
-    private List<MedicineInventoryEntity> medicineInventoryEntity;
+    @Column(columnDefinition = "bigint[]")
+    private Long[] medicineIds;
 
 
 }

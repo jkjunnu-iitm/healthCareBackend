@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @Table(name = "phlebotomist_test_table")
 @Data
@@ -19,8 +17,7 @@ public class PhlebotomistTestEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "appointment_id")
     private AppointmentEntity appointmentEntity;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "lab_test_ids")
-    private List<LabTestsEntity> labTestsEntities;
+    @Column(columnDefinition = "bigint[]")
+    private Long[] labTestIds;
     private String patientTestData;
 }
