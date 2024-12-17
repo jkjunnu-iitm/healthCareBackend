@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,17 @@ public class PhlebotomistTestService {
     }
 
     public ResponseEntity<?> getAllPendingTests() {
-        return ResponseEntity.status(HttpStatus.OK).body(phlebotomistTestRepository.findByAppointmentEntity_Stage("phlebotomist"));
+
+        List<PhlebotomistTestEntity> phlebotomistTestEntityList = phlebotomistTestRepository.findByAppointmentEntity_Stage("phlebotomist");
+
+        for (PhlebotomistTestEntity phlebotomistTestEntity : phlebotomistTestEntityList) {
+
+            List<LabTestsEntity> labTestsEntityList = labTestsRepository.findByLabTestIdIn(Arrays.asList(phlebotomistTestEntity.getLabTestIds()));
+            phlebotomistTestEntity.setLabTestsEntityList(labTestsEntityList);
+
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(phlebotomistTestEntityList);
     }
 
     public ResponseEntity<?> saveLabTestRecords(@Valid SaveLabTestRecordsDto saveLabTestRecordsDto) {

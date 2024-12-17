@@ -1,9 +1,7 @@
 package com.healthCareAnalyzer.Health_Care_Backend.service.prescription;
 
 import com.healthCareAnalyzer.Health_Care_Backend.dto.prescription.CreatePrescriptionRecordDto;
-import com.healthCareAnalyzer.Health_Care_Backend.entity.AppointmentEntity;
-import com.healthCareAnalyzer.Health_Care_Backend.entity.MedicineInventoryEntity;
-import com.healthCareAnalyzer.Health_Care_Backend.entity.PrescriptionEntity;
+import com.healthCareAnalyzer.Health_Care_Backend.entity.*;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.AppointmentRepository;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.MedicineInventoryRepository;
 import com.healthCareAnalyzer.Health_Care_Backend.repository.PrescriptionRepository;
@@ -13,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +51,15 @@ public class PrescriptionService {
     }
 
     public ResponseEntity<?> getAllPendingPrescriptions() {
-        return ResponseEntity.status(HttpStatus.OK).body(prescriptionRepository.findByAppointmentEntity_Stage("receptionist"));
+        List<PrescriptionEntity> prescriptionEntityList = prescriptionRepository.findByAppointmentEntity_Stage("receptionist");
+
+        for (PrescriptionEntity prescriptionEntity : prescriptionEntityList) {
+
+            List<MedicineInventoryEntity> medicineInventoryEntityList = medicineInventoryRepository.findByMedicineIdIn(Arrays.asList(prescriptionEntity.getMedicineIds()));
+            prescriptionEntity.setMedicineInventoryEntities(medicineInventoryEntityList);
+
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(prescriptionEntityList);
     }
 
 

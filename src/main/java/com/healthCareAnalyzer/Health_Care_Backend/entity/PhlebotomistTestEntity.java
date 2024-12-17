@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "phlebotomist_test_table")
 @Data
@@ -20,4 +22,7 @@ public class PhlebotomistTestEntity {
     @Column(columnDefinition = "bigint[]")
     private Long[] labTestIds;
     private String patientTestData;
+
+    @Transient
+    private List<LabTestsEntity> labTestsEntityList;
 }

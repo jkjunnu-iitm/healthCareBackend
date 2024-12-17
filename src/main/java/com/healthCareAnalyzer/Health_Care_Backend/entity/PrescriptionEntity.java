@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "prescription_table")
 @Data
@@ -19,6 +21,9 @@ public class PrescriptionEntity {
     private AppointmentEntity appointmentEntity;
     @Column(columnDefinition = "bigint[]")
     private Long[] medicineIds;
+
+    @Transient
+    private List<MedicineInventoryEntity> medicineInventoryEntities;
 
 
 }
